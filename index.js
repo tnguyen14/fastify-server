@@ -69,4 +69,4 @@ function createServer(options) {
   });
 }
 
-module.exports = createServer();
+module.exports = createServer;
