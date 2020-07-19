@@ -1,7 +1,8 @@
-const fastify = require("fastify")
+const fastify = require("fastify");
 const fastifySecretProvider = require("fastify-authz-jwks");
 const fastifyJwt = require("fastify-jwt");
 const fastifySensible = require("fastify-sensible");
+const fastifyCors = require("fastify-cors");
 
 function createServer(options) {
   if (!options) {
@@ -15,10 +16,12 @@ function createServer(options) {
   }
   const fastifyOptions = {
     logger: options.logger || false,
-    ignoreTrailingSlash: options.ignoreTrailingSlash || true
-  }
+    ignoreTrailingSlash: options.ignoreTrailingSlash || true,
+  };
 
   const nojwtCheckRoutes = options.nojwtCheckRoutes || ["/healthcheck"];
+  const allowedOrigins = options.allowedOrigins || [];
+
   const server = fastify(fastifyOptions);
 
   server.register(fastifySensible);
@@ -34,6 +37,10 @@ function createServer(options) {
     issuer: `https://${options.auth0Domain}`,
     algorithms: ["RS256"],
     decode: { complete: true },
+  });
+
+  fastify.register(fastifyCors, {
+    origin: allowedOrigins,
   });
 
   fastify.addHook("preValidation", async (request, reply) => {

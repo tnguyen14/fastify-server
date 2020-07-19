@@ -19,6 +19,7 @@
   "dependencies": {
     "fastify": "^3.1.1",
     "fastify-authz-jwks": "^1.1.11",
+    "fastify-cors": "^4.1.0",
     "fastify-jwt": "^2.1.2",
     "fastify-sensible": "^3.0.1"
   },
