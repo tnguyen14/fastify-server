@@ -67,6 +67,7 @@ function createServer(options) {
       reply.send(err);
     }
   });
+  return server;
 }
 
 module.exports = createServer;
