@@ -14,7 +14,7 @@ function createServer(options) {
     throw new Error("auth0ClientId is required");
   }
   const fastifyOptions = {
-    logger: options.logger || true,
+    logger: options.logger || false,
     ignoreTrailingSlash: options.ignoreTrailingSlash || true
   }
 
