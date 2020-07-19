@@ -1,0 +1,25 @@
+{
+  "name": "@tridnguyen/fastify-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tnguyen14/fastify-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tnguyen14/fastify-server/issues"
+  },
+  "homepage": "https://github.com/tnguyen14/fastify-server#readme",
+  "dependencies": {
+    "fastify": "^3.1.1",
+    "fastify-authz-jwks": "^1.1.11",
+    "fastify-jwt": "^2.1.2",
+    "fastify-sensible": "^3.0.1"
+  }
+}
