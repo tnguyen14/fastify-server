@@ -34,7 +34,7 @@ start();
 
 - `options.logger`: boolean. Defaults to `false`.
 - `options.ignoreTrailingSlash`: boolean. Defaults to `true`.
-- `options.auth0Domain`: string. Required.
-- `options.auth0ClientId`: string. Required.
+- `options.auth0Domain`: string. Required unless `shouldPerformJwtCheck` is `false`.
+- `options.auth0ClientId`: string. Required unless `shouldPerformJwtCheck` is `false`.
 - `options.allowedOrigins`: array. Defaults to `[]`.
 - `options.shouldPerformJwtCheck`: boolean or a function. If a function, it should return `true` if jwt validation is needed, `false` otherwise. Default to validate JWT.

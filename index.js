@@ -9,12 +9,6 @@ function createServer(options) {
   if (!options) {
     throw new Error("options cannot be empty");
   }
-  if (!options.auth0Domain) {
-    throw new Error("auth0Domain is required");
-  }
-  if (!options.auth0ClientId) {
-    throw new Error("auth0ClientId is required");
-  }
   const fastifyOptions = {
     logger: options.logger || false,
     ignoreTrailingSlash: options.ignoreTrailingSlash || true,
@@ -26,47 +20,54 @@ function createServer(options) {
   const server = fastify(fastifyOptions);
 
   server.register(fastifySensible);
-
-  server.register(fastifyJwt, {
-    secret: fastifySecretProvider({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: `https://${options.auth0Domain}/.well-known/jwks.json`,
-    }),
-    audience: options.auth0ClientId,
-    issuer: `https://${options.auth0Domain}`,
-    algorithms: ["RS256"],
-    decode: { complete: true },
-  });
-
   server.register(fastifyCors, {
     origin: allowedOrigins,
   });
 
-  server.addHook("preValidation", async (request, reply) => {
-    if (options.shouldPerformJwtCheck != undefined) {
-      if (isCallable(options.shouldPerformJwtCheck)) {
-        if (!options.shouldPerformJwtCheck(request)) {
+  if (options.shouldPerformJwtCheck != false) {
+    if (!options.auth0Domain) {
+      throw new Error("auth0Domain is required");
+    }
+    if (!options.auth0ClientId) {
+      throw new Error("auth0ClientId is required");
+    }
+    server.register(fastifyJwt, {
+      secret: fastifySecretProvider({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: `https://${options.auth0Domain}/.well-known/jwks.json`,
+      }),
+      audience: options.auth0ClientId,
+      issuer: `https://${options.auth0Domain}`,
+      algorithms: ["RS256"],
+      decode: { complete: true },
+    });
+
+    server.addHook("preValidation", async (request, reply) => {
+      if (options.shouldPerformJwtCheck != undefined) {
+        if (isCallable(options.shouldPerformJwtCheck)) {
+          if (!options.shouldPerformJwtCheck(request)) {
+            return;
+          }
+        }
+        if (!options.shouldPerformJwtCheck) {
           return;
         }
       }
-      if (!options.shouldPerformJwtCheck) {
-        return;
+      try {
+        if (
+          nojwtCheckRoutes.every((route) => {
+            return !request.req.url.match(new RegExp(route));
+          })
+        ) {
+          await request.jwtVerify();
+        }
+      } catch (err) {
+        reply.send(err);
       }
-    }
-    try {
-      if (
-        nojwtCheckRoutes.every((route) => {
-          return !request.req.url.match(new RegExp(route));
-        })
-      ) {
-        await request.jwtVerify();
-      }
-    } catch (err) {
-      reply.send(err);
-    }
-  });
+    });
+  }
   return server;
 }
 
