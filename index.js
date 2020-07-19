@@ -3,6 +3,7 @@ const fastifySecretProvider = require("fastify-authz-jwks");
 const fastifyJwt = require("fastify-jwt");
 const fastifySensible = require("fastify-sensible");
 const fastifyCors = require("fastify-cors");
+const isCallable = require("is-callable");
 
 function createServer(options) {
   if (!options) {
@@ -44,8 +45,13 @@ function createServer(options) {
   });
 
   fastify.addHook("preValidation", async (request, reply) => {
-    if (options.shouldPerformJwtCheck) {
-      if (!options.shouldPerformJwtCheck(request)) {
+    if (options.shouldPerformJwtCheck != undefined) {
+      if (isCallable(options.shouldPerformJwtCheck)) {
+        if (!options.shouldPerformJwtCheck(request)) {
+          return;
+        }
+      }
+      if (!options.shouldPerformJwtCheck) {
         return;
       }
     }
