@@ -40,11 +40,11 @@ function createServer(options) {
     decode: { complete: true },
   });
 
-  fastify.register(fastifyCors, {
+  server.register(fastifyCors, {
     origin: allowedOrigins,
   });
 
-  fastify.addHook("preValidation", async (request, reply) => {
+  server.addHook("preValidation", async (request, reply) => {
     if (options.shouldPerformJwtCheck != undefined) {
       if (isCallable(options.shouldPerformJwtCheck)) {
         if (!options.shouldPerformJwtCheck(request)) {
