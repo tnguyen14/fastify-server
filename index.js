@@ -58,7 +58,7 @@ function createServer(options) {
       try {
         if (
           nojwtCheckRoutes.every((route) => {
-            return !request.req.url.match(new RegExp(route));
+            return !request.url.match(new RegExp(route));
           })
         ) {
           await request.jwtVerify();
