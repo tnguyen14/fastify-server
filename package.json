@@ -22,7 +22,8 @@
     "fastify-cors": "^4.1.0",
     "fastify-jwt": "^2.1.2",
     "fastify-sensible": "^3.0.1",
-    "is-callable": "^1.2.0"
+    "is-callable": "^1.2.0",
+    "qs": "^6.9.4"
   },
   "devDependencies": {
     "husky": "^4.2.5",

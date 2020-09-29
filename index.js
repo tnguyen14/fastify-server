@@ -4,6 +4,7 @@ const fastifyJwt = require("fastify-jwt");
 const fastifySensible = require("fastify-sensible");
 const fastifyCors = require("fastify-cors");
 const isCallable = require("is-callable");
+const qs = require("qs");
 
 function createServer(options) {
   if (!options) {
@@ -12,6 +13,7 @@ function createServer(options) {
   const fastifyOptions = {
     logger: options.logger || false,
     ignoreTrailingSlash: options.ignoreTrailingSlash || true,
+    querystringParser: (str) => qs.parse(str),
   };
 
   const nojwtCheckRoutes = options.nojwtCheckRoutes || ["/healthcheck"];
