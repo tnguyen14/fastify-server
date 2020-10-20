@@ -40,7 +40,7 @@ function createServer(options) {
         jwksRequestsPerMinute: 5,
         jwksUri: `https://${options.auth0Domain}/.well-known/jwks.json`,
       }),
-      audience: options.auth0ClientId,
+      audience: options.audience || options.auth0ClientId,
       issuer: `https://${options.auth0Domain}`,
       algorithms: ["RS256"],
       decode: { complete: true },
