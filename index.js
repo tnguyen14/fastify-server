@@ -11,7 +11,7 @@ function createServer(options) {
     throw new Error("options cannot be empty");
   }
   const fastifyOptions = {
-    logger: options.logger || false,
+    logger: options.logger || { prettyPrint: true },
     ignoreTrailingSlash: options.ignoreTrailingSlash || true,
     querystringParser: (str) => qs.parse(str),
   };

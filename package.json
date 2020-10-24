@@ -23,6 +23,7 @@
     "fastify-jwt": "^2.1.2",
     "fastify-sensible": "^3.0.1",
     "is-callable": "^1.2.0",
+    "pino-pretty": "^4.3.0",
     "qs": "^6.9.4"
   },
   "devDependencies": {
