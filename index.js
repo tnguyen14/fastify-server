@@ -68,7 +68,8 @@ function createServer(options) {
           await request.jwtVerify();
         }
       } catch (err) {
-        reply.send(err);
+        console.error(err);
+        reply.badRequest(err.message || "JWT verification failed");
       }
     });
   }
