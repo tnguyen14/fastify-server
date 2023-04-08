@@ -1,8 +1,8 @@
 const fastify = require("fastify");
 const fastifySecretProvider = require("fastify-authz-jwks");
-const fastifyJwt = require("fastify-jwt");
+const fastifyJwt = require("@fastify/jwt");
 const fastifySensible = require("@fastify/sensible");
-const fastifyCors = require("fastify-cors");
+const fastifyCors = require("@fastify/cors");
 const isCallable = require("is-callable");
 const qs = require("qs");
 
