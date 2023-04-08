@@ -18,7 +18,7 @@
   "homepage": "https://github.com/tnguyen14/fastify-server#readme",
   "dependencies": {
     "@fastify/cors": "^7.0.0",
-    "@fastify/jwt": "^6.7.1",
+    "@fastify/jwt": "~6.2.1",
     "@fastify/sensible": "^4.1.0",
     "fastify": "^3.27.4",
     "fastify-authz-jwks": "^1.1.12",
