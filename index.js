@@ -1,10 +1,10 @@
 const fastify = require("fastify");
-const fastifySecretProvider = require("fastify-authz-jwks");
 const fastifyJwt = require("@fastify/jwt");
 const fastifySensible = require("@fastify/sensible");
 const fastifyCors = require("@fastify/cors");
 const isCallable = require("is-callable");
 const qs = require("qs");
+const jwksClient = require("jwks-rsa");
 
 function createServer(options) {
   if (!options) {
@@ -35,13 +35,53 @@ function createServer(options) {
     if (!options.auth0ClientId) {
       throw new Error("auth0ClientId is required");
     }
+
+    const client = jwksClient({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${options.auth0Domain}/.well-known/jwks.json`,
+    });
     server.register(fastifyJwt, {
-      secret: fastifySecretProvider({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: `https://${options.auth0Domain}/.well-known/jwks.json`,
-      }),
+      secret: async (request, token) => {
+        // token
+        /*
+{
+  header: {
+    alg: 'RS256',
+    typ: 'JWT',
+    kid: 'REJEMEI4MzNBNDVFMTFBRDRGMTFFMkU5RERCRjhEQkJFMDk2NzRCNA'
+  },
+  payload: {
+    iss: 'https://tridnguyen.auth0.com/',
+    sub: 'google-oauth2|102956012089794272878',
+    aud: [
+      'https://lists.cloud.tridnguyen.com',
+      'https://tridnguyen.auth0.com/userinfo'
+    ],
+    iat: 1681053925,
+    exp: 1681140325,
+    azp: 'z3IK464A6PogdpKe0LY0vTaKr6izei2a',
+    scope: 'openid profile email offline_access'
+  },
+  signature: 'vqDsvNiflmMS-....6N24Zw-OkA',
+  input: 'eyJhbGciOiJS...2Nlc3MifQ'
+}
+        */
+
+        const {
+          header: { alg, kid },
+        } = token;
+        // If algorithm is not using RS256, the encryption key is client secret
+        if (alg.startsWith("HS")) {
+          throw new Error("Please pass along Auth0 client secret");
+        }
+        if (alg !== "RS256") {
+          throw new Error("Expecting RS256");
+        }
+        const key = await client.getSigningKey(kid);
+        return key.getPublicKey();
+      },
       audience: options.audience || options.auth0ClientId,
       issuer: `https://${options.auth0Domain}`,
       algorithms: ["RS256"],

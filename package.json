@@ -21,8 +21,8 @@
     "@fastify/jwt": "^5.0.1",
     "@fastify/sensible": "^4.1.0",
     "fastify": "^3.27.4",
-    "fastify-authz-jwks": "^1.1.12",
     "is-callable": "^1.2.4",
+    "jwks-rsa": "^3.0.1",
     "pino-pretty": "^7.5.3",
     "qs": "^6.10.3"
   },
