@@ -12,7 +12,9 @@ function createServer(options) {
   }
   const fastifyOptions = {
     logger: options.logger || {
-      prettyPrint: process.env.NODE_ENV != "production",
+      transport: {
+        target: "pino-pretty",
+      },
     },
     ignoreTrailingSlash: options.ignoreTrailingSlash || true,
     querystringParser: (str) => qs.parse(str),
