@@ -11,11 +11,7 @@ function createServer(options) {
     throw new Error("options cannot be empty");
   }
   const fastifyOptions = {
-    logger: options.logger || {
-      transport: {
-        target: "pino-pretty",
-      },
-    },
+    logger: options.logger || {},
     ignoreTrailingSlash: options.ignoreTrailingSlash || true,
     querystringParser: (str) => qs.parse(str),
   };

@@ -7,3 +7,15 @@ test("create server", (t) => {
   });
   t.end();
 });
+
+test("create server pino-pretty", (t) => {
+  fastifyServer({
+    shouldPerformJwtCheck: false,
+    logger: {
+      transport: {
+        target: "pino-pretty",
+      },
+    },
+  });
+  t.end();
+});
