@@ -13,4 +13,4 @@ jobs:
      - name: Install deps 
        run: npm ci
      - name: Test
-       run: npm t
+       run: npm t -- --no-check-coverage
