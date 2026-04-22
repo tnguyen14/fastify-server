@@ -30,8 +30,8 @@ function createServer(options) {
     if (!options.auth0Domain) {
       throw new Error("auth0Domain is required");
     }
-    if (!options.auth0ClientId) {
-      throw new Error("auth0ClientId is required");
+    if (!options.audience) {
+      throw new Error("audience is required");
     }
 
     const client = jwksClient({
@@ -80,7 +80,7 @@ function createServer(options) {
         const key = await client.getSigningKey(kid);
         return key.getPublicKey();
       },
-      audience: options.audience || options.auth0ClientId,
+      audience: options.audience,
       issuer: `https://${options.auth0Domain}`,
       algorithms: ["RS256"],
       decode: { complete: true },
